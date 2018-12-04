@@ -257,13 +257,21 @@ class Parser:
                     pos += 1
                 else:
                     end = fmt.index('>', pos)
-                    pattern = fmt[pos:end] or 'str'
+                    pattern = fmt[pos:end]
+                    suppress = False
+                    if pattern.startswith('*'):
+                        # suppress listing
+                        pattern = pattern[1:]
+                        suppress = True
+
+                    pattern = pattern or 'str'
+
                     conversion, _, pattern = pattern.partition(':')
                     convfunc, default_re = _parser_conversions[conversion]
                     if not pattern:
                         pattern = default_re
                     regex += '({})'.format(pattern)
-                    self.conversions.append(convfunc)
+                    self.conversions.append((convfunc, suppress))
                     pos = end + 1
 
             else:
@@ -286,7 +294,9 @@ class Parser:
         if m:
             self.items = tuple(
                 self._convert(m, convfunc, group)
-                for (group, convfunc) in enumerate(self.conversions, 1))
+                for (group, (convfunc, suppress)) in enumerate(self.conversions, 1)
+                if not suppress
+            )
         else:
             self.items = ()
 
