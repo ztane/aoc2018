@@ -1,3 +1,4 @@
+from numbers import *
 # noinspection PyUnresolvedReferences
 import operator as op
 import re
@@ -491,6 +492,16 @@ def cmanhattan(val: complex) -> int:
     return int(abs(val.real) + abs(val.imag))
 
 
+def manhattan(*components: Real) -> Real:
+    """
+    Calculate the L_1 norm of the given components
+    :param components: the real components
+    :return: the norm
+    """
+
+    return sum(map(abs, components))
+
+
 def spiral_walk() -> typing.Iterator[complex]:
     """
     Return the generator of the spiral walk, as in AOC 2017 puzzle 3.
@@ -712,5 +723,3 @@ def scalar(i: Iterable, nested=False):
             return i
 
     return i
-
-
