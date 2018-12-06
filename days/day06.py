@@ -6,10 +6,10 @@ d = get_aoc_data(day=6)
 def part1_and_2():
     coords = list(d.parsed('<int>, <int>'))
 
-    min_x = min([x for (x, y) in coords])
-    max_x = max([x for (x, y) in coords])
-    min_y = min([y for (x, y) in coords])
-    max_y = max([y for (x, y) in coords])
+    min_x = min(map(op.itemgetter(0), coords))
+    max_x = max(map(op.itemgetter(0), coords))
+    min_y = min(map(op.itemgetter(1), coords))
+    max_y = max(map(op.itemgetter(1), coords))
 
     colour_count = Counter()
     infinite = set()
