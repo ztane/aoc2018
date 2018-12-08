@@ -37,6 +37,7 @@ def part1_and_2():
             if x in (min_x, max_x) or y in (min_y, max_y):
                 infinite.add(colour)
 
+    colour_count.pop(-1, None)
     for k, c in colour_count.most_common():
         if k not in infinite:
             largest = c
