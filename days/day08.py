@@ -30,5 +30,5 @@ def part1_and_2():
 
         return meta_sum, this_value
 
-    value = read_part(reader)
-    return value
+    meta_sum, this_value = read_part(reader)
+    return meta_sum, this_value
