@@ -25,44 +25,45 @@ def part1_and_2():
                     SimpleNamespace(
                         position=p,
                         direction=direction,
-                        turn_direction=cycle((-1j, 1, 1j)),
+                        crossing_turn_directions=cycle((-1j, 1, 1j)),
                         removed=False
                     ))
 
     first_crash = None
     while True:
-        current_positions = set([c.position for c in carts])
+        cart_positions = {c.position: c for c in carts}
         carts.sort(key=lambda c: (c.position.imag, c.position.real))
 
-        for i in carts:
-            current_positions.discard(i.position)
-            i.position += i.direction
-            if i.position in current_positions:
+        for c in carts:
+            if c.removed:
+                continue
+
+            cart_positions.pop(c.position)
+            c.position += c.direction
+
+            # crash?
+            if c.position in cart_positions:
                 if not first_crash:
-                    first_crash = i.position
+                    first_crash = c.position
 
-                for j in list(carts):
-                    if j.position == i.position:
-                        j.removed = True
-
-                current_positions.discard(i.position)
+                c.removed = cart_positions.pop(c.position).removed = True
+                continue
             else:
-                current_positions.add(i.position)
+                cart_positions[c.position] = c
 
-            if map[i.position] == '/':
-                cd = i.direction
-                i.direction = complex(-cd.imag, -cd.real)
+            if map[c.position] == '/':
+                c.direction = complex(-c.direction.imag, -c.direction.real)
 
-            elif map[i.position] == '\\':
-                cd = i.direction
-                i.direction = complex(cd.imag, cd.real)
+            elif map[c.position] == '\\':
+                c.direction = complex(c.direction.imag, c.direction.real)
 
-            elif map[i.position] == '+':
-                i.direction *= next(i.turn_direction)
+            elif map[c.position] == '+':
+                c.direction *= next(c.crossing_turn_directions)
 
         for c in list(carts):
             if c.removed:
                 carts.remove(c)
 
         if len(carts) <= 1:
-            return coords(first_crash), coords(carts[0].position) if carts else None
+            return (coords(first_crash),
+                    coords(carts[0].position) if carts else None)
