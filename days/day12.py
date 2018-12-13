@@ -17,14 +17,12 @@ def run_to(target):
     iteration = 0
 
     while True:
-        rules_used = set()
         new_state = {}
         for i in range(min(state.keys()) - 4, max(state.keys()) + 5):
             vector = ''
             for j in range(-2, 3):
                 vector += '.#'[state.get(i + j, False)]
 
-            rules_used.add(vector)
             if map.get(vector) == '#':
                 new_state[i] = True
 

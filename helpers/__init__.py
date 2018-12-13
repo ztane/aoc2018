@@ -726,3 +726,18 @@ def scalar(i: Iterable, nested=False):
             return i
 
     return i
+
+
+def coords(i: Union[complex, Iterable]) -> str:
+    """
+    Convert the given thing whatever it is to nice coordinate string.
+    :param i: the thing
+    :return:
+    """
+
+    if isinstance(i, complex):
+        return f'{int(i.real)},{int(i.imag)}'
+
+    else:
+        x, y = i
+        return f'{int(x)},{int(y)}'
